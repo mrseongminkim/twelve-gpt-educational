@@ -51,9 +51,6 @@ to_hash = (player.id,)
 # Now create the chat as type PlayerChat
 chat = create_chat(to_hash, PlayerChat, player, players)
 
-players.df.to_csv("data/players.csv")
-exit()
-
 # Now we want to add basic content to chat if it's empty
 if chat.state == "empty":
     # Make a plot of the distribution of the metrics for all players
