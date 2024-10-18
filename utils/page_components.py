@@ -101,13 +101,9 @@ def add_common_page_elements():
     # Insert local CSS as fast as possible for better display
     insert_local_css()
     # Create a page selector
-    page_selector_container = st.sidebar.container()
     sidebar_container = st.sidebar.container()
 
-    page_selector_container = st.sidebar.container()
-    sidebar_container = st.sidebar.container()
-
-    with page_selector_container:
+    with sidebar_container:
         add_page_selector()
 
     sidebar_container.divider()
@@ -115,24 +111,18 @@ def add_common_page_elements():
     return sidebar_container    
 
 
-def select_player(container,players,gender,position):
-
+def select_player(container, players, gender, position):
     # Make a copy of Players object
-    player=copy.deepcopy(players)
-
+    player = copy.deepcopy(players)
     # Filter players by position and select a player with sidebar selectors
     with container:
-
         # Filter for player name
         player.select_and_filter(
             column_name="player_name",
             label="Player",
         )
-
         # Return data point
-
         player=player.to_data_point(gender,position)
-        
     return player
 
 def create_chat(to_hash, chat_class, *args, **kwargs):

@@ -56,7 +56,6 @@ class Embeddings:
             # text-embedding-ada-002 (Version 2) model
             ENGINE = ENGINE_ADA
         embedding = get_embedding(query, engine=ENGINE, use_gemini=USE_GEMINI)
-        
         return embedding    
         
 class PlayerEmbeddings(Embeddings):

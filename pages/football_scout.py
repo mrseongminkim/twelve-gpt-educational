@@ -1,22 +1,9 @@
-"""
-Entrypoint for streamlit app.
-Runs top to bottom every time the user interacts with the app (other than imports and cached functions).
-"""
-
-# Library imports
-import traceback
-import copy
-
 import streamlit as st
 
 from classes.data_source import PlayerStats
-from classes.data_point import Player
 from classes.visual import DistributionPlot
-from classes.description import (
-    PlayerDescription,
-)
+from classes.description import PlayerDescription
 from classes.chat import PlayerChat
-
 from utils.page_components import (
     add_common_page_elements,
     select_player,
@@ -24,16 +11,12 @@ from utils.page_components import (
 )
 
 sidebar_container = add_common_page_elements()
-page_container = st.sidebar.container()
-sidebar_container = st.sidebar.container()
 
 st.divider()
-
 
 # minimal_minutes is the minimum number of minutes a player must have played to be included in the analysis
 minimal_minutes = 300
 players = PlayerStats(minimal_minutes=minimal_minutes)
-
 
 # Define the metrics we are interested in and calculates them
 metrics = [
@@ -47,6 +30,7 @@ metrics = [
     "ground_duels_won_adjusted_per90",
     "air_duels_won_adjusted_per90",
 ]
+# negative_metrics: lower the better
 players.calculate_statistics(metrics=metrics)
 
 # Now select the focal player
@@ -58,10 +42,7 @@ st.write("This app can only handle three or four users at a time. Please [downlo
 with open("model cards/model-card-football-scout.md", 'r') as file:
     # Read the contents of the file
     model_card_text = file.read()
-
-
 st.expander("Model card for Football Scout", expanded=False).markdown(model_card_text)
-
 st.expander("Dataframe used", expanded=False).write(players.df)
 
 # Chat state hash determines whether or not we should load a new chat or continue an old one
@@ -70,9 +51,11 @@ to_hash = (player.id,)
 # Now create the chat as type PlayerChat
 chat = create_chat(to_hash, PlayerChat, player, players)
 
+players.df.to_csv("data/players.csv")
+exit()
+
 # Now we want to add basic content to chat if it's empty
 if chat.state == "empty":
-
     # Make a plot of the distribution of the metrics for all players
     # We reverse the order of the elements in metrics for plotting (because they plot from bottom to top)
     visual = DistributionPlot(metrics[::-1])

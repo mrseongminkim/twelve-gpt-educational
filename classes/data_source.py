@@ -1,23 +1,11 @@
 from pandas.core.api import DataFrame as DataFrame
 import streamlit as st
-import requests
+
 import pandas as pd
 import numpy as np
-import copy
-import json
-import datetime
 from scipy.stats import zscore
-import os 
-
-from itertools import accumulate
-from pathlib import Path
-import sys
-import pyarrow.parquet as pq
-
 
 import classes.data_point as data_point
-#from classes.wyscout_api import WyNot
-
 
 # Base class for all data 
 class Data():
@@ -41,7 +29,6 @@ class Data():
         return self.process_data(raw)
     
     def select_and_filter(self, column_name, label):
-        
         df = self.df
         selected_id = st.sidebar.selectbox(label, df[column_name].unique())
         self.df = df[df[column_name] == selected_id]
@@ -132,20 +119,17 @@ class PlayerStats(Stats):
 
         return df_raw
 
-    def to_data_point(self,gender,position) -> data_point.Player:
-        
+    def to_data_point(self, gender, position) -> data_point.Player:
         id = self.df.index[0]
 
         #Reindexing dataframe
         self.df.reset_index(drop=True, inplace=True)
 
-        name=self.df['player_name'][0]
-        minutes_played=self.df['Minutes'][0]
-        self.df=self.df.drop(columns=["player_name", "Minutes"])
+        name = self.df['player_name'][0]
+        minutes_played = self.df['Minutes'][0]
+        self.df = self.df.drop(columns=["player_name", "Minutes"])
 
         # Convert to series
         ser_metrics = self.df.squeeze()
         
         return self.data_point_class(id=id,name=name,minutes_played=minutes_played,gender=gender,position=position,ser_metrics=ser_metrics,relevant_metrics=self.metrics)
-
-    
