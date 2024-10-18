@@ -265,7 +265,6 @@ class PlayerDescription(Description):
         subject_p, object_p, possessive_p = sentences.pronouns(player.gender)
         
         for metric in metrics:
-
             description += f"{subject_p.capitalize()} was "
             description += sentences.describe_level(player.ser_metrics[metric +"_Z"]) 
             description += " in " + sentences.write_out_metric(metric)

@@ -6,6 +6,9 @@ sidebar_container = add_common_page_elements()
 
 st.divider()
 
+title = '''# CIDA '''
+st.markdown(title)
+
 title = '''## About Twelve GPT Educational '''
 st.markdown(title)
 
